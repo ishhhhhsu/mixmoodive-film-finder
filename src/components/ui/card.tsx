@@ -11,7 +11,7 @@ const cardVariants = cva(
         default: "border-border shadow-sm",
         cinema: "bg-gradient-card border-accent/20 shadow-card hover:shadow-cinema hover:border-accent/40 transition-all duration-300",
         mood: "bg-gradient-card border-primary/20 shadow-card hover:shadow-mood hover:scale-105 transition-all duration-300",
-        glow: "bg-gradient-card border-accent/30 shadow-mood animate-glow-pulse",
+        glow: "bg-gradient-card border-accent/30 shadow-mood hover:shadow-cinema transition-all duration-300",
       }
     },
     defaultVariants: {
