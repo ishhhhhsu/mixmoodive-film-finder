@@ -10,31 +10,90 @@ const analyticsData = {
   positiveReviews: 789,
   negativeReviews: 458,
   mostPopularMood: "happy",
-  dailyStats: [
-    { date: "Mon", happy: 45, sad: 12, romantic: 23, thrilling: 34, serious: 15, excited: 28 },
-    { date: "Tue", happy: 52, sad: 8, romantic: 31, thrilling: 29, serious: 18, excited: 35 },
-    { date: "Wed", happy: 38, sad: 15, romantic: 19, thrilling: 42, serious: 22, excited: 31 },
-    { date: "Thu", happy: 61, sad: 9, romantic: 27, thrilling: 38, serious: 14, excited: 41 },
-    { date: "Fri", happy: 47, sad: 11, romantic: 33, thrilling: 45, serious: 19, excited: 38 },
-    { date: "Sat", happy: 55, sad: 7, romantic: 41, thrilling: 39, serious: 16, excited: 43 },
-    { date: "Sun", happy: 49, sad: 13, romantic: 36, thrilling: 33, serious: 21, excited: 37 }
-  ],
-  topMovies: [
-    { title: "The Grand Budapest Hotel", views: 342, rating: 8.1 },
-    { title: "Inception", views: 298, rating: 8.8 },
-    { title: "La La Land", views: 287, rating: 8.0 },
-    { title: "The Dark Knight", views: 245, rating: 9.0 },
-    { title: "Amélie", views: 223, rating: 8.3 }
-  ]
+  dailyStats: [{
+    date: "Mon",
+    happy: 45,
+    sad: 12,
+    romantic: 23,
+    thrilling: 34,
+    serious: 15,
+    excited: 28
+  }, {
+    date: "Tue",
+    happy: 52,
+    sad: 8,
+    romantic: 31,
+    thrilling: 29,
+    serious: 18,
+    excited: 35
+  }, {
+    date: "Wed",
+    happy: 38,
+    sad: 15,
+    romantic: 19,
+    thrilling: 42,
+    serious: 22,
+    excited: 31
+  }, {
+    date: "Thu",
+    happy: 61,
+    sad: 9,
+    romantic: 27,
+    thrilling: 38,
+    serious: 14,
+    excited: 41
+  }, {
+    date: "Fri",
+    happy: 47,
+    sad: 11,
+    romantic: 33,
+    thrilling: 45,
+    serious: 19,
+    excited: 38
+  }, {
+    date: "Sat",
+    happy: 55,
+    sad: 7,
+    romantic: 41,
+    thrilling: 39,
+    serious: 16,
+    excited: 43
+  }, {
+    date: "Sun",
+    happy: 49,
+    sad: 13,
+    romantic: 36,
+    thrilling: 33,
+    serious: 21,
+    excited: 37
+  }],
+  topMovies: [{
+    title: "The Grand Budapest Hotel",
+    views: 342,
+    rating: 8.1
+  }, {
+    title: "Inception",
+    views: 298,
+    rating: 8.8
+  }, {
+    title: "La La Land",
+    views: 287,
+    rating: 8.0
+  }, {
+    title: "The Dark Knight",
+    views: 245,
+    rating: 9.0
+  }, {
+    title: "Amélie",
+    views: 223,
+    rating: 8.3
+  }]
 };
-
 const Analytics = () => {
-  const sentimentRatio = (analyticsData.positiveReviews / analyticsData.totalReviews) * 100;
+  const sentimentRatio = analyticsData.positiveReviews / analyticsData.totalReviews * 100;
   const currentHour = new Date().getHours();
   const todayMood = currentHour < 12 ? "excited" : currentHour < 18 ? "happy" : "romantic";
-
-  return (
-    <div className="min-h-screen bg-gradient-hero">
+  return <div className="min-h-screen bg-gradient-hero">
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -70,7 +129,7 @@ const Analytics = () => {
           <Card variant="glow">
             <CardContent className="p-6 text-center">
               <Film className="w-8 h-8 mx-auto text-primary mb-3" />
-              <div className="text-2xl font-bold text-foreground">30+</div>
+              <div className="text-2xl font-bold text-foreground">50k+</div>
               <p className="text-sm text-muted-foreground">Movies in Database</p>
             </CardContent>
           </Card>
@@ -104,10 +163,9 @@ const Analytics = () => {
                     </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-3">
-                    <div 
-                      className="h-3 bg-mood-happy rounded-full transition-all duration-1000"
-                      style={{ width: `${sentimentRatio}%` }}
-                    />
+                    <div className="h-3 bg-mood-happy rounded-full transition-all duration-1000" style={{
+                    width: `${sentimentRatio}%`
+                  }} />
                   </div>
                 </div>
 
@@ -119,10 +177,9 @@ const Analytics = () => {
                     </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-3">
-                    <div 
-                      className="h-3 bg-mood-sad rounded-full transition-all duration-1000"
-                      style={{ width: `${100 - sentimentRatio}%` }}
-                    />
+                    <div className="h-3 bg-mood-sad rounded-full transition-all duration-1000" style={{
+                    width: `${100 - sentimentRatio}%`
+                  }} />
                   </div>
                 </div>
 
@@ -159,37 +216,24 @@ const Analytics = () => {
             <CardContent>
               <div className="space-y-4">
                 {analyticsData.dailyStats.map((day, index) => {
-                  const total = Object.entries(day).reduce((sum, [key, val]) => 
-                    key !== 'date' && typeof val === 'number' ? sum + val : sum, 0
-                  );
-                  
-                  return (
-                    <div key={day.date} className="space-y-2">
+                const total = Object.entries(day).reduce((sum, [key, val]) => key !== 'date' && typeof val === 'number' ? sum + val : sum, 0);
+                return <div key={day.date} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium">{day.date}</span>
                         <span className="text-xs text-muted-foreground">{total} selections</span>
                       </div>
                       <div className="flex gap-1 h-6 rounded-full overflow-hidden bg-muted">
                         {Object.entries(day).map(([mood, count]) => {
-                          if (mood === 'date' || typeof count !== 'number') return null;
-                          const percentage = (count / total) * 100;
-                          
-                          return (
-                            <div
-                              key={mood}
-                              className={`bg-mood-${mood} transition-all duration-500 hover:opacity-80`}
-                              style={{ 
-                                width: `${percentage}%`,
-                                animationDelay: `${index * 100}ms`
-                              }}
-                              title={`${mood}: ${count}`}
-                            />
-                          );
-                        })}
+                      if (mood === 'date' || typeof count !== 'number') return null;
+                      const percentage = count / total * 100;
+                      return <div key={mood} className={`bg-mood-${mood} transition-all duration-500 hover:opacity-80`} style={{
+                        width: `${percentage}%`,
+                        animationDelay: `${index * 100}ms`
+                      }} title={`${mood}: ${count}`} />;
+                    })}
                       </div>
-                    </div>
-                  );
-                })}
+                    </div>;
+              })}
               </div>
             </CardContent>
           </Card>
@@ -204,8 +248,7 @@ const Analytics = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {analyticsData.topMovies.map((movie, index) => (
-                  <div key={movie.title} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                {analyticsData.topMovies.map((movie, index) => <div key={movie.title} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-sm font-bold">
                         {index + 1}
@@ -225,8 +268,7 @@ const Analytics = () => {
                     <Badge variant="secondary" className="text-xs">
                       #{index + 1}
                     </Badge>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -241,15 +283,13 @@ const Analytics = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-3">
-                {Object.entries(moodEmojis).map(([mood, emoji]) => (
-                  <div key={mood} className="flex items-center gap-3 p-2 bg-muted/20 rounded-lg">
+                {Object.entries(moodEmojis).map(([mood, emoji]) => <div key={mood} className="flex items-center gap-3 p-2 bg-muted/20 rounded-lg">
                     <span className="text-2xl">{emoji}</span>
                     <div>
                       <p className="font-medium capitalize text-sm">{mood}</p>
                       <div className={`w-8 h-1 bg-mood-${mood} rounded-full`} />
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -291,8 +331,6 @@ const Analytics = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Analytics;
