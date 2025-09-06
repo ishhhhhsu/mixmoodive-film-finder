@@ -8,36 +8,24 @@ import { Navigation } from "@/components/Navigation";
 import { Sparkles, Film, Heart, Zap } from "lucide-react";
 import { getMoviesByMood, getRandomMovie } from "@/lib/movieData";
 import heroImage from "@/assets/hero-cinema.jpg";
-
 const Index = () => {
   const navigate = useNavigate();
-  const [featuredMovies, setFeaturedMovies] = useState(() => 
-    getMoviesByMood("happy").slice(0, 3)
-  );
-
+  const [featuredMovies, setFeaturedMovies] = useState(() => getMoviesByMood("happy").slice(0, 3));
   const moods = ["happy", "sad", "romantic", "thrilling", "serious", "excited"];
-
   const handleMoodClick = (mood: string) => {
     navigate(`/mood/${mood}`);
   };
-
   const handleRandomMovie = () => {
     const randomMovie = getRandomMovie();
     setFeaturedMovies([randomMovie, ...featuredMovies.slice(0, 2)]);
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-hero">
+  return <div className="min-h-screen bg-gradient-hero">
       <Navigation />
       
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={heroImage} 
-            alt="Cinematic hero background" 
-            className="w-full h-full object-cover opacity-30"
-          />
+          <img src={heroImage} alt="Cinematic hero background" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-hero/80" />
         </div>
         
@@ -56,10 +44,7 @@ const Index = () => {
                 <Heart className="w-5 h-5 mr-2" />
                 Analyze Sentiment
               </Button>
-              <Button variant="hero" size="xl" onClick={handleRandomMovie}>
-                <Sparkles className="w-5 h-5 mr-2" />
-                Surprise Me
-              </Button>
+              
             </div>
           </div>
         </div>
@@ -78,15 +63,9 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {moods.map((mood, index) => (
-              <MoodCard
-                key={mood}
-                mood={mood}
-                onClick={() => handleMoodClick(mood)}
-                className={`animate-scale-in`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              />
-            ))}
+            {moods.map((mood, index) => <MoodCard key={mood} mood={mood} onClick={() => handleMoodClick(mood)} className={`animate-scale-in`} style={{
+            animationDelay: `${index * 100}ms`
+          }} />)}
           </div>
         </div>
       </section>
@@ -104,15 +83,11 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredMovies.map((movie, index) => (
-              <div
-                key={movie.id}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 200}ms` }}
-              >
+            {featuredMovies.map((movie, index) => <div key={movie.id} className="animate-fade-in" style={{
+            animationDelay: `${index * 200}ms`
+          }}>
                 <MovieCard movie={movie} />
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -159,8 +134,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
