@@ -152,7 +152,7 @@ const SearchMovies = () => {
         {/* Results */}
         <div className="mb-6">
           <h2 className="text-2xl font-bold mb-2">
-            Search Results ({filteredMovies.length} movies)
+            Search Results
           </h2>
           <p className="text-muted-foreground">
             {filteredMovies.length === movieDatabase.length 
