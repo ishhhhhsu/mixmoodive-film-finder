@@ -10,36 +10,72 @@ import { useState, useEffect } from "react";
 const MoodRecommendations = () => {
   const { mood } = useParams<{ mood: string }>();
   const navigate = useNavigate();
-  const [movies, setMovies] = useState(getMoviesByMood(mood || "happy").slice(0, 5));
-  const [previousMovies, setPreviousMovies] = useState<string[]>([]);
+  const [movies, setMovies] = useState<any[]>([]);
+  const [moviePool, setMoviePool] = useState<any[]>([]);
+  const [poolIndex, setPoolIndex] = useState(0);
+  const [previousMovieIds, setPreviousMovieIds] = useState<string[]>([]);
   
   useEffect(() => {
     if (mood) {
-      const initialMovies = getMoviesByMood(mood).slice(0, 5);
+      const allMovies = getMoviesByMood(mood);
+      const shuffledPool = [...allMovies].sort(() => Math.random() - 0.5);
+      const initialMovies = shuffledPool.slice(0, Math.min(5, allMovies.length));
+      
+      setMoviePool(shuffledPool);
       setMovies(initialMovies);
-      setPreviousMovies(initialMovies.map(m => m.id));
+      setPoolIndex(initialMovies.length);
+      setPreviousMovieIds(initialMovies.map(m => m.id));
     }
   }, [mood]);
 
   const shuffleMovies = () => {
-    if (mood) {
-      const allMovies = getMoviesByMood(mood);
-      
-      // Filter out previously shown movies
-      let availableMovies = allMovies.filter(movie => !previousMovies.includes(movie.id));
-      
-      // If we don't have enough different movies, refill from the full list
-      if (availableMovies.length < 5) {
-        availableMovies = [...allMovies];
+    if (!mood) return;
+    
+    const allMovies = getMoviesByMood(mood);
+    
+    // If mood has 5 or fewer movies, no shuffle needed
+    if (allMovies.length <= 5) {
+      return;
+    }
+    
+    let newMovies: any[] = [];
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    // Try up to 10 times to get a different set
+    while (attempts < maxAttempts) {
+      // Check if we need to reshuffle the pool
+      if (poolIndex + 5 > moviePool.length) {
+        const reshuffledPool = [...allMovies].sort(() => Math.random() - 0.5);
+        setMoviePool(reshuffledPool);
+        setPoolIndex(0);
+        newMovies = reshuffledPool.slice(0, 5);
+      } else {
+        newMovies = moviePool.slice(poolIndex, poolIndex + 5);
       }
       
-      // Shuffle and pick 5 movies
-      const shuffled = [...availableMovies].sort(() => Math.random() - 0.5);
-      const newMovies = shuffled.slice(0, 5);
+      // Check if the new set is different from the previous one
+      const newMovieIds = newMovies.map(m => m.id);
+      const isDifferent = !previousMovieIds.every(id => newMovieIds.includes(id)) || 
+                         !newMovieIds.every(id => previousMovieIds.includes(id));
       
-      setMovies(newMovies);
-      setPreviousMovies(newMovies.map(m => m.id));
+      if (isDifferent) {
+        break;
+      }
+      
+      attempts++;
+      // If we're stuck, just reshuffle the entire pool
+      if (attempts >= maxAttempts / 2) {
+        const reshuffledPool = [...allMovies].sort(() => Math.random() - 0.5);
+        setMoviePool(reshuffledPool);
+        setPoolIndex(0);
+        newMovies = reshuffledPool.slice(0, 5);
+      }
     }
+    
+    setMovies(newMovies);
+    setPoolIndex(prev => (prev + 5) % moviePool.length);
+    setPreviousMovieIds(newMovies.map(m => m.id));
   };
 
   if (!mood) {
@@ -82,10 +118,16 @@ const MoodRecommendations = () => {
                   We've curated {movies.length} movies that perfectly capture this feeling
                 </p>
               </div>
-              <Button variant="accent" onClick={shuffleMovies}>
-                <Shuffle className="w-4 h-4 mr-2" />
-                Shuffle Movies
-              </Button>
+              {getMoviesByMood(mood).length > 5 ? (
+                <Button variant="accent" onClick={shuffleMovies}>
+                  <Shuffle className="w-4 h-4 mr-2" />
+                  Shuffle Movies
+                </Button>
+              ) : (
+                <p className="text-muted-foreground text-sm">
+                  Only {getMoviesByMood(mood).length} movies available
+                </p>
+              )}
             </div>
             <div className={`w-full h-2 bg-${colorClass} rounded-full mt-4 opacity-80`} />
           </CardContent>

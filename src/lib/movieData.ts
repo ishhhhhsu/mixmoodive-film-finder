@@ -1196,7 +1196,17 @@ export const moodColors: Record<string, string> = {
 export const getMoviesByMood = (mood: string): Movie[] => {
   return movieDatabase.filter(movie => 
     movie.mood.includes(mood.toLowerCase())
-  ).slice(0, 5);
+  );
+};
+
+export const getRandomMoviesFromMood = (mood: string, count: number = 5): Movie[] => {
+  const allMovies = getMoviesByMood(mood);
+  if (allMovies.length <= count) {
+    return allMovies;
+  }
+  
+  const shuffled = [...allMovies].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
 };
 
 export const searchMovies = (query: string): Movie[] => {
