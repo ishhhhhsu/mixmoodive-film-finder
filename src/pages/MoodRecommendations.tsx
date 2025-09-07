@@ -10,19 +10,35 @@ import { useState, useEffect } from "react";
 const MoodRecommendations = () => {
   const { mood } = useParams<{ mood: string }>();
   const navigate = useNavigate();
-  const [movies, setMovies] = useState(getMoviesByMood(mood || "happy"));
+  const [movies, setMovies] = useState(getMoviesByMood(mood || "happy").slice(0, 5));
+  const [previousMovies, setPreviousMovies] = useState<string[]>([]);
   
   useEffect(() => {
     if (mood) {
-      setMovies(getMoviesByMood(mood));
+      const initialMovies = getMoviesByMood(mood).slice(0, 5);
+      setMovies(initialMovies);
+      setPreviousMovies(initialMovies.map(m => m.id));
     }
   }, [mood]);
 
   const shuffleMovies = () => {
     if (mood) {
       const allMovies = getMoviesByMood(mood);
-      const shuffled = [...allMovies].sort(() => Math.random() - 0.5);
-      setMovies(shuffled.slice(0, 5));
+      
+      // Filter out previously shown movies
+      let availableMovies = allMovies.filter(movie => !previousMovies.includes(movie.id));
+      
+      // If we don't have enough different movies, refill from the full list
+      if (availableMovies.length < 5) {
+        availableMovies = [...allMovies];
+      }
+      
+      // Shuffle and pick 5 movies
+      const shuffled = [...availableMovies].sort(() => Math.random() - 0.5);
+      const newMovies = shuffled.slice(0, 5);
+      
+      setMovies(newMovies);
+      setPreviousMovies(newMovies.map(m => m.id));
     }
   };
 
