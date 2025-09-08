@@ -130,22 +130,18 @@ const SentimentAnalysis = () => {
               </div>
 
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Try these sample reviews:</p>
-                <div className="space-y-2">
+                <p className="text-sm text-muted-foreground mb-3">Try these sample reviews:</p>
+                <div className="space-y-3">
                   {sampleReviews.map((sample, index) => (
-                    <Button
+                    <div
                       key={index}
-                      variant="ghost"
-                      size="sm"
-                      className="text-left h-auto min-h-[3rem] max-h-[5rem] p-3 text-xs w-full justify-start overflow-hidden"
+                      className="bg-muted/30 border border-border/50 rounded-lg p-4 cursor-pointer hover:bg-muted/50 hover:border-accent/30 transition-all duration-200 max-h-[120px] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent"
                       onClick={() => setReviewText(sample)}
                     >
-                      <div className="w-full overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-                        <span className="break-words leading-relaxed block">
-                          "{sample.length > 100 ? `${sample.slice(0, 100)}...` : sample}"
-                        </span>
-                      </div>
-                    </Button>
+                      <p className="text-sm text-foreground leading-relaxed break-words">
+                        "{sample}"
+                      </p>
+                    </div>
                   ))}
                 </div>
               </div>
