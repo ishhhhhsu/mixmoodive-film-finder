@@ -137,10 +137,14 @@ const SentimentAnalysis = () => {
                       key={index}
                       variant="ghost"
                       size="sm"
-                      className="text-left h-auto p-2 text-xs"
+                      className="text-left h-auto min-h-[3rem] max-h-[5rem] p-3 text-xs w-full justify-start overflow-hidden"
                       onClick={() => setReviewText(sample)}
                     >
-                      "{sample.slice(0, 80)}..."
+                      <div className="w-full overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+                        <span className="break-words leading-relaxed block">
+                          "{sample.length > 100 ? `${sample.slice(0, 100)}...` : sample}"
+                        </span>
+                      </div>
                     </Button>
                   ))}
                 </div>
